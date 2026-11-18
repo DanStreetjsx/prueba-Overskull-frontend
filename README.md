@@ -1,42 +1,76 @@
 # frontend-prueba
 
-This template should help get you started developing with Vue 3 in Vite.
+Frontend en Vue 3 + Vite + TypeScript para gestionar **productos** y **categorías**.
 
-## Recommended IDE Setup
+## Guía rápida
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### 1. Requisitos
 
-## Recommended Browser Setup
+- [Node.js](https://nodejs.org/) `^22.18.0` o `>=24.12.0` (comprueba con `node -v`)
+- El backend (Laravel) corriendo, para que la API responda
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### 2. Instalar dependencias
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+Desde la carpeta `frontend-prueba`:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 3. Configurar la URL de la API (opcional)
+
+Por defecto el frontend llama a `http://localhost/api` (ver `src/services/apiClient.ts`).
+Si tu backend corre en otra dirección (por ejemplo `php artisan serve` usa el puerto 8000),
+crea un archivo `.env` en esta carpeta:
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+### 4. Levantar el servidor de desarrollo
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Abre la URL que muestra la terminal (normalmente <http://localhost:5173>).
+
+## Rutas
+
+| Ruta          | Vista      |
+| ------------- | ---------- |
+| `/products`   | Productos  |
+| `/categories` | Categorías |
+
+## Otros comandos
 
 ```sh
-npm run build
+npm run type-check   # revisa los tipos con vue-tsc
+npm run build        # compila para producción (carpeta dist/)
+npm run preview      # sirve el build de producción en local
 ```
+
+## Estructura
+
+```
+src/
+├── components/   # AlertMessage, DataTable, EntityForm, LoadingState
+├── router/       # rutas
+├── services/
+│   ├── apiClient.ts   # cliente HTTP principal
+│   ├── api/           # llamadas a los endpoints
+│   ├── repositories/  # capa sobre la API
+│   └── hooks/         # lógica reutilizable (useProducts, useCategories)
+├── types/        # interfaces TypeScript
+└── views/        # ProductsView, CategoriesView
+```
+
+## Problemas comunes
+
+- **"No se pudo conectar con la API"**: el backend no está encendido o `VITE_API_URL` apunta a otra dirección. Reinicia `npm run dev` después de cambiar el `.env`.
+- **Error de CORS**: revisa la configuración de CORS del backend (`config/cors.php`).
+- **Versión de Node no soportada**: actualiza Node a la versión indicada en los requisitos.
+
+## IDE recomendado
+
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (desactiva Vetur).
